@@ -1,0 +1,148 @@
+# Helper Entities Required for Kitchen Dashboard
+# Add these to your Home Assistant configuration
+
+# ============================================================
+# INPUT SELECTS (Dropdowns)
+# ============================================================
+
+input_select:
+  # Dashboard list selector for todo lists
+  kitchen_dashboard_selected_list:
+    name: Kitchen Dashboard Selected List
+    options:
+      - shopping
+      - costco
+      - kids
+      - honey
+    initial: shopping
+    icon: mdi:format-list-bulleted
+
+  # Camera view selector
+  kitchen_dashboard_camera_view:
+    name: Kitchen Dashboard Camera View
+    options:
+      - front
+      - back
+      - all
+    initial: front
+    icon: mdi:cctv
+
+  # Media player selector
+  kitchen_dashboard_media_player:
+    name: Kitchen Dashboard Media Player
+    options:
+      - Living Room
+      - Basement
+    initial: Living Room
+    icon: mdi:speaker-multiple
+
+  # Announcement selector
+  announcement:
+    name: Announcement
+    options:
+      - Dinner time
+      - Bed time
+    initial: Dinner time
+    icon: mdi:bullhorn
+
+  # Vacuum room segments selector
+  vacuum_segments:
+    name: Vacuum Segments
+    options:
+      - Blast Zone
+      - Mud Room
+      - Dining Room
+      - Study
+      - Entry
+      - Bathroom
+      - Living Room
+      - Kitchen
+    initial: Kitchen
+    icon: mdi:robot-vacuum
+
+# ============================================================
+# INPUT BOOLEANS (Toggles)
+# ============================================================
+
+input_boolean:
+  # Guest mode toggle
+  guest_mode:
+    name: Guest Mode
+    icon: mdi:account-group
+
+  # Vacuum scheduling toggle
+  vacuum_enabled:
+    name: Vacuum Schedule Enabled
+    icon: mdi:calendar-clock
+
+  # Visitor watching mode
+  watching_for_visitors:
+    name: Watching for Visitors
+    icon: mdi:account-eye
+
+  # Furnace filter reminder
+  furnance_filter_reminder:
+    name: Furnace Filter Reminder
+    icon: mdi:air-filter
+
+  # 3D print completion notification
+  kitchen_dashboard_print_complete_notification:
+    name: Kitchen Dashboard Print Complete Notification
+    icon: mdi:printer-3d
+
+  # Recycling week indicator
+  is_recycling_pickup_next:
+    name: Is Recycling Pickup Next
+    icon: mdi:recycle
+
+# ============================================================
+# INPUT TEXT
+# ============================================================
+
+input_text:
+  # Calendar date selection for event filtering
+  kitchen_dashboard_selected_date:
+    name: Kitchen Dashboard Selected Date
+    initial: ""
+    max: 20
+    icon: mdi:calendar
+
+# ============================================================
+# INPUT NUMBER
+# ============================================================
+
+input_number:
+  # Irrigation run time slider
+  irrigation_run_minutes:
+    name: Irrigation Run Minutes
+    initial: 10
+    min: 1
+    max: 30
+    step: 1
+    unit_of_measurement: minutes
+    icon: mdi:timer-outline
+
+  # Network traffic monitoring (optional)
+  internet_traffic_delta_in:
+    name: Internet Traffic Delta In
+    min: 0
+    max: 10000000000
+    step: 1
+    mode: box
+
+  internet_traffic_delta_out:
+    name: Internet Traffic Delta Out
+    min: 0
+    max: 10000000000
+    step: 1
+    mode: box
+
+# ============================================================
+# INPUT BUTTON
+# ============================================================
+
+input_button:
+  # Timed irrigation start button
+  start_timed_irrigation:
+    name: Start Timed Irrigation
+    icon: mdi:sprinkler

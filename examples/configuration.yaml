@@ -1,0 +1,79 @@
+# Example configuration.yaml setup for Kitchen Dashboard
+# This shows the key sections needed to enable the dashboard
+
+# ============================================================
+# LOVELACE DASHBOARD CONFIGURATION
+# ============================================================
+
+lovelace:
+  mode: storage
+  dashboards:
+    kitchen-dashboard:
+      mode: yaml
+      title: Kitchen Dashboard
+      icon: mdi:countertop-outline
+      show_in_sidebar: true
+      filename: kitchen-dashboard.yaml
+
+# ============================================================
+# FRONTEND CONFIGURATION
+# ============================================================
+
+frontend:
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
+  themes:
+    kitchen-dashboard:
+      # Bubble Card styling
+      bubble-main-background-color: "rgb(245,245,245,.7)"
+      ha-card-background: "rgb(245,245,245,.7)"
+      bubble-secondary-background-color: "rgb(255,255,255,.6)"
+      bubble-accent-color: "#6c7b7e"
+      bubble-pop-up-main-background-color: "rgba(255,255,255,0.8)"
+
+      # Color palette
+      primary-color: "#6c7b7e"
+      accent-color: "#f8c8a7"
+
+      # Typography - Quicksand font
+      ha-font-family-body: '"Quicksand", sans-serif'
+      ha-font-family-heading: '"Quicksand", sans-serif'
+      primary-font-family: '"Quicksand", sans-serif'
+      paper-font-common-base_-_font-family: '"Quicksand", sans-serif'
+
+# ============================================================
+# SHELL COMMANDS (for dashboard refresh)
+# ============================================================
+
+shell_command:
+  touch_kitchen_dashboard: touch /config/kitchen-dashboard.yaml
+
+# ============================================================
+# INCLUDES (adjust paths as needed)
+# ============================================================
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+template: !include templates.yaml
+
+# ============================================================
+# OPTIONAL: NOTIFY GROUP
+# ============================================================
+
+notify:
+  - platform: group
+    name: household_notify_group
+    services:
+      - service: mobile_app_phone_1
+      - service: mobile_app_phone_2
+
+# ============================================================
+# OPTIONAL: GOOGLE ASSISTANT (for voice control)
+# ============================================================
+
+# google_assistant:
+#   project_id: your-project-id
+#   service_account: !include service-account-key.json
+#   report_state: true
+#   expose_by_default: true

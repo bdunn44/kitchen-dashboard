@@ -1,0 +1,27 @@
+# Kitchen Dashboard Theme
+# Add this to your configuration.yaml under frontend: themes:
+# Or include via themes folder if using packages
+
+kitchen-dashboard:
+  # Bubble Card styling
+  bubble-main-background-color: "rgb(245,245,245,.7)"
+  ha-card-background: "rgb(245,245,245,.7)"
+  bubble-secondary-background-color: "rgb(255,255,255,.6)"
+  bubble-accent-color: "#6c7b7e"
+  bubble-pop-up-main-background-color: "rgba(255,255,255,0.8)"
+
+  # Color palette
+  primary-color: "#6c7b7e"     # Muted slate/teal
+  accent-color: "#f8c8a7"      # Soft peach/amber
+
+  # Typography - Quicksand font family
+  ha-font-family-body: '"Quicksand", sans-serif'
+  ha-font-family-heading: '"Quicksand", sans-serif'
+  primary-font-family: '"Quicksand", sans-serif'
+  paper-font-common-base_-_font-family: '"Quicksand", sans-serif'
+
+  # Optional customizations (uncomment to enable)
+  # bubble-border-radius: "8px"
+  # bubble-icon-background-color: "rgb(50,80,100)"
+  # bubble-select-list-width: "200px"
+  # bubble-select-list-background-color: "rgb(100,140,180)"

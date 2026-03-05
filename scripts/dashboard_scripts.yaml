@@ -1,0 +1,360 @@
+# Scripts Required for Kitchen Dashboard
+# Add these to your scripts.yaml or scripts folder
+
+# ============================================================
+# VACUUM CONTROL
+# ============================================================
+
+start_pause_vacuum:
+  alias: Start/Pause Vacuum
+  description: Starts or pauses a vacuum entity based on its current state
+  mode: parallel
+  max: 10
+  fields:
+    vacuum_entity:
+      description: The vacuum entity to start/stop
+      example: vacuum.roborock_q5_max
+      required: true
+      selector:
+        entity:
+          domain: vacuum
+  sequence:
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: '{{ is_state(vacuum_entity, "Cleaning") }}'
+          sequence:
+            - action: vacuum.pause
+              target:
+                entity_id: '{{ vacuum_entity }}'
+              data: {}
+      default:
+        - action: vacuum.start
+          target:
+            entity_id: '{{ vacuum_entity }}'
+          data: {}
+
+vacuum_the_selected_area:
+  alias: Vacuum the selected area
+  description: Vacuum a specific room based on input_select
+  icon: mdi:robot-vacuum
+  sequence:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: input_select.vacuum_segments
+              state: Blast Zone
+          sequence:
+            - action: vacuum.send_command
+              data:
+                command: app_segment_clean
+                params:
+                  - segments:
+                      - 22
+                      - 25
+              target:
+                device_id: YOUR_VACUUM_DEVICE_ID
+        - conditions:
+            - condition: state
+              entity_id: input_select.vacuum_segments
+              state: Kitchen
+          sequence:
+            - action: vacuum.send_command
+              data:
+                command: app_segment_clean
+                params:
+                  - segments:
+                      - 25
+              target:
+                device_id: YOUR_VACUUM_DEVICE_ID
+        # Add more room conditions as needed
+
+# ============================================================
+# ANNOUNCEMENT SYSTEM
+# ============================================================
+
+announce:
+  alias: Announce
+  description: Announce message based on selection
+  mode: single
+  sequence:
+    - variables:
+        message: >
+          {% if is_state('input_select.announcement', 'Dinner time') %}
+            It's dinner time, come and get it!
+          {% elif is_state('input_select.announcement', 'Bed time') %}
+            Time for bed!
+          {% endif %}
+    - action: tts.speak
+      target:
+        entity_id: tts.piper  # Or your TTS entity
+      data:
+        cache: true
+        media_player_entity_id: media_player.kitchen_display  # Your speaker
+        message: '{{ message }}'
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 4
+        milliseconds: 0
+
+# ============================================================
+# IRRIGATION CONTROL
+# ============================================================
+
+run_irrigation:
+  alias: Run Irrigation
+  description: Run irrigation zone for specified duration
+  sequence:
+    - action: rainbird.start_irrigation
+      data:
+        duration: '{{ duration }}'
+      target:
+        entity_id: '{{ entity }}'
+    - delay:
+        hours: 0
+        minutes: '{{ duration }}'
+        seconds: 15
+        milliseconds: 0
+  fields:
+    entity:
+      selector:
+        entity: {}
+      name: entity
+      required: true
+    duration:
+      selector:
+        number:
+          min: 1
+          max: 30
+      name: duration
+      required: true
+
+run_irrigation_blocking_based_on_input_number:
+  alias: Run Irrigation (Blocking, Based on Input Number)
+  description: Run irrigation using the dashboard slider value
+  sequence:
+    - action: script.run_irrigation
+      data:
+        duration: "{{ states('input_number.irrigation_run_minutes') }}"
+        entity: '{{ entity }}'
+  fields:
+    entity:
+      selector:
+        entity: {}
+      name: entity
+      required: true
+
+# ============================================================
+# MUSIC DASHBOARD
+# ============================================================
+
+music_dashboard_play_media:
+  alias: Music Dashboard | Play Media
+  description: Play a playlist or artist on the selected dashboard media player
+  mode: single
+  fields:
+    media_id:
+      description: Name or URI of the item to play
+      example: Chill Beats
+      required: true
+      selector:
+        text:
+    media_type:
+      description: Type of media (playlist, artist, album, track)
+      example: playlist
+      required: false
+      default: playlist
+      selector:
+        select:
+          options:
+            - playlist
+            - artist
+            - album
+            - track
+  sequence:
+    - variables:
+        target_player: >
+          {% set selection = states('input_select.kitchen_dashboard_media_player') %}
+          {% if selection == 'Living Room' %}
+            media_player.ma_living_room_receiver
+          {% elif selection == 'Basement' %}
+            media_player.ma_basement_receiver
+          {% else %}
+            media_player.ma_living_room_receiver
+          {% endif %}
+    - action: music_assistant.play_media
+      data:
+        media_id: '{{ media_id }}'
+        media_type: '{{ media_type }}'
+        enqueue: replace
+      target:
+        entity_id: '{{ target_player }}'
+
+music_dashboard_toggle_group_player:
+  alias: Music Dashboard | Toggle Group Player
+  description: Join or unjoin a player from the fixed master group
+  mode: single
+  fields:
+    player_entity:
+      description: Entity ID of the player to toggle
+      required: true
+      selector:
+        entity:
+          domain: media_player
+    master_entity:
+      description: Entity ID of the fixed master player
+      required: true
+      selector:
+        entity:
+          domain: media_player
+  sequence:
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ player_entity in
+                   state_attr(master_entity, 'group_members') | default([]) }}
+          sequence:
+            - action: media_player.unjoin
+              target:
+                entity_id: '{{ player_entity }}'
+        - conditions:
+            - condition: template
+              value_template: >
+                {{ player_entity not in
+                   state_attr(master_entity, 'group_members') | default([]) }}
+          sequence:
+            - action: media_player.join
+              target:
+                entity_id: '{{ master_entity }}'
+              data:
+                group_members:
+                  - '{{ player_entity }}'
+
+# ============================================================
+# VISITOR MONITORING
+# ============================================================
+
+cast_frigate_to_kitchen_display:
+  alias: Watch for visitors
+  description: Cast Frigate birdseye view to kitchen display
+  mode: single
+  icon: mdi:television
+  sequence:
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.watching_for_visitors
+    - action: tts.google_translate_say
+      data:
+        cache: false
+        entity_id: media_player.kitchen_display
+        message: OK, I'll let you know when someone arrives
+    - action: camera.play_stream
+      data:
+        media_player: media_player.kitchen_display
+        format: hls
+      target:
+        entity_id: camera.birdseye
+
+stop_watching_for_visitors:
+  alias: Stop watching for visitors
+  mode: single
+  icon: mdi:television-off
+  sequence:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.watching_for_visitors
+    - action: tts.google_translate_say
+      data:
+        cache: false
+        entity_id: media_player.kitchen_display
+        message: OK, done
+    - action: media_player.turn_off
+      target:
+        entity_id: media_player.kitchen_display
+
+# ============================================================
+# DASHBOARD REFRESH
+# ============================================================
+
+hard_refresh_kitchen_dashboard:
+  alias: Hard Refresh Kitchen Dashboard
+  description: Force refresh the kitchen dashboard on the tablet
+  sequence:
+    - action: shell_command.touch_kitchen_dashboard
+      alias: touch config/kitchen-dashboard.yaml
+    - action: frontend.reload_themes
+    - action: fully_kiosk.load_url
+      data:
+        device_id: YOUR_TABLET_DEVICE_ID
+        url: https://your-ha-instance/kitchen-dashboard/home?kiosk
+
+# ============================================================
+# SCENE CONTROL
+# ============================================================
+
+deactivate_scene:
+  alias: Deactivate Scene
+  description: Turn off all entities that are part of a scene
+  mode: parallel
+  max: 20
+  icon: mdi:projector-screen-off-outline
+  variables:
+    entities: '{{ state_attr(scene, "entity_id") }}'
+  sequence:
+    - repeat:
+        for_each: '{{ entities }}'
+        sequence:
+          - action: script.turn_off_entity
+            data:
+              entity_id: '{{ repeat.item }}'
+
+turn_off_entity:
+  alias: Turn off switch or light by entity ID
+  mode: parallel
+  max: 20
+  icon: mdi:alarm-light-off
+  sequence:
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: '{{ entity_id.startswith("light.") }}'
+          sequence:
+            - action: light.turn_off
+              target:
+                entity_id: '{{ entity_id }}'
+        - conditions:
+            - condition: template
+              value_template: '{{ entity_id.startswith("switch.") }}'
+          sequence:
+            - action: switch.turn_off
+              target:
+                entity_id: '{{ entity_id }}'
+
+toggle_lock:
+  alias: Toggle Lock
+  description: Locks or unlocks a lock entity based on its current state
+  mode: parallel
+  max: 10
+  fields:
+    lock_entity:
+      description: The lock entity to toggle
+      example: lock.front_door_lock
+      required: true
+      selector:
+        entity:
+          domain: lock
+  sequence:
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: '{{ is_state(lock_entity, "locked") }}'
+          sequence:
+            - action: lock.unlock
+              target:
+                entity_id: '{{ lock_entity }}'
+      default:
+        - action: lock.lock
+          target:
+            entity_id: '{{ lock_entity }}'

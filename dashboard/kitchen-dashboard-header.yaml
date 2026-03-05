@@ -1,0 +1,255 @@
+- type: custom:mushroom-chips-card
+  alignment: start
+  chips:
+    # Recycling indicator chip
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: input_boolean.is_recycling_pickup_next
+          state_not: "on"
+      chip:
+        type: template
+        icon: mdi:recycle
+        icon_color: green
+        content: Recycling Week
+
+    # 3D Printer progress chip
+    - type: conditional
+      conditions:
+        - condition: numeric_state
+          entity: sensor.print_eastwood_print_progress
+          above: 0
+          below: 100
+      chip:
+        type: template
+        entity: sensor.print_eastwood_time_remaining_formatted
+        content: "{{ states[entity].state }}"
+        icon: mdi:printer-3d-nozzle-outline
+        tap_action:
+          action: navigate
+          navigation_path: "#3d-printer"
+
+    # 3D Print complete notification chip
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: input_boolean.kitchen_dashboard_print_complete_notification
+          state: "on"
+      chip:
+        type: template
+        entity: input_boolean.kitchen_dashboard_print_complete_notification
+        content: Print finished!
+        icon: mdi:printer-3d
+        tap_action:
+          action: navigate
+          navigation_path: "#3d-printer"
+
+    # Scene schedule indicator chip
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: calendar.home_assistant_scene_schedule
+          state: "on"
+      chip:
+        type: template
+        entity: calendar.home_assistant_scene_schedule
+        icon: >-
+          {{ state_attr('scene.outdoor_' ~ state_attr(entity, 'message') | lower, 'icon') }}
+        icon_color: red
+        content: >-
+          {{ states[entity].attributes.message | replace("_", " ") | title }} lights
+
+    # Furnace filter reminder chip
+    - type: conditional
+      conditions:
+        - condition: state
+          entity: input_boolean.furnance_filter_reminder
+          state: "on"
+      chip:
+        type: template
+        tap_action:
+          action: perform-action
+          perform_action: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.furnance_filter_reminder
+          data: {}
+        icon: mdi:air-filter
+        content: Change the Furnace Filters
+
+    # Garage door open warning chip
+    - type: conditional
+      conditions:
+        - condition: or
+          conditions:
+            - condition: state
+              entity: cover.garage_double_door
+              state: open
+            - condition: state
+              entity: cover.garage_single_door
+              state: open
+      chip:
+        type: template
+        icon: mdi:garage-open
+        content: Garage is open
+        tap_action:
+          action: navigate
+          navigation_path: "#garage"
+  view_layout:
+    grid-column: span 3
+  card_mod:
+    style: |
+      ha-card {
+        --chip-height: 28px;
+        --chip-spacing: 4px;
+      }
+
+# Title and People presence section
+- type: custom:button-card
+  view_layout:
+    grid-column: span 3
+  show_name: false
+  show_state: false
+  show_icon: false
+  styles:
+    grid:
+      - grid-template-areas: '"title people"'
+      - grid-template-columns: 1fr auto
+      - grid-template-rows: 1fr
+      - align-items: center
+    card:
+      - background: none
+      - border: none
+      - box-shadow: none
+      - padding: 0
+      - margin-top: 13px
+  custom_fields:
+    title:
+      card:
+        type: custom:mushroom-title-card
+        title: |
+          {% set time = now().hour %} {% if time >= 18 %}
+            Good Evening
+          {% elif time >= 12 %}
+            Good Afternoon
+          {% elif time >= 5 %}
+            Good Morning!
+          {% else %}
+            Welcome!
+          {% endif %}
+        alignment: end
+        card_mod:
+          style: |
+            ha-card {
+              padding: 0 10px 0 0 !important;
+              margin: 0 !important;
+            }
+            .title {
+              color: #fff !important;
+            }
+    people:
+      card:
+        type: custom:button-card
+        show_name: false
+        show_state: false
+        show_icon: false
+        styles:
+          grid:
+            - grid-template-areas: '"p1 p2"'
+            - grid-template-columns: auto auto
+            - grid-template-rows: 1fr
+            - column-gap: 10px
+            - align-items: center
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 0
+        custom_fields:
+          p1:
+            card:
+              type: horizontal-stack
+              card_mod:
+                style: |
+                  ha-card {
+                    align-items: center !important;
+                    display: flex !important;
+                  }
+              cards:
+                - type: custom:button-card
+                  entity: person.person_1
+                  show_entity_picture: true
+                  show_name: false
+                  show_state: false
+                  styles:
+                    card:
+                      - width: 45px
+                      - height: 45px
+                      - border-radius: 50%
+                      - padding: 0
+                      - border: none
+                      - background: none
+                    entity_picture:
+                      - width: 100%
+                - type: custom:button-card
+                  icon: >
+                    [[[ return states['sensor.person_1_location_icon'].state; ]]]
+                  show_name: false
+                  show_state: false
+                  styles:
+                    card:
+                      - width: 20px
+                      - height: 20px
+                      - margin-left: '-18px'
+                      - background: none
+                      - border: none
+                    img_cell:
+                      - background-color: >
+                          [[[ return states['sensor.person_1_location_color'].state; ]]]
+                      - border-radius: 50%
+                    icon:
+                      - width: 80%
+                      - color: white
+          p2:
+            card:
+              type: horizontal-stack
+              card_mod:
+                style: |
+                  ha-card {
+                    align-items: center !important;
+                    display: flex !important;
+                  }
+              cards:
+                - type: custom:button-card
+                  entity: person.person_2
+                  show_entity_picture: true
+                  show_name: false
+                  show_state: false
+                  styles:
+                    card:
+                      - width: 45px
+                      - height: 45px
+                      - border-radius: 50%
+                      - padding: 0
+                      - border: none
+                      - background: none
+                    entity_picture:
+                      - width: 100%
+                - type: custom:button-card
+                  icon: >
+                    [[[ return states['sensor.person_2_location_icon'].state; ]]]
+                  show_name: false
+                  show_state: false
+                  styles:
+                    card:
+                      - width: 20px
+                      - height: 20px
+                      - margin-left: '-18px'
+                      - background: none
+                      - border: none
+                    img_cell:
+                      - background-color: >
+                          [[[ return states['sensor.person_2_location_color'].state; ]]]
+                      - border-radius: 50%
+                    icon:
+                      - width: 80%
+                      - color: white

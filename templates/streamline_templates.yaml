@@ -1,0 +1,641 @@
+# Streamline Card Templates for Kitchen Dashboard
+# Place this file at: www/community/streamline-card/streamline_templates.yaml
+
+## TODO Lists
+tabbed-shopping-lists:
+  card:
+    type: custom:tabbed-card
+    tabs:
+      - card:
+          type: todo-list
+          entity: todo.google_keep_shopping_list
+          display_order: none
+          hide_completed: true
+          hide_create: false
+          hide_section_headers: true
+        attributes:
+          label: Shopping List
+          icon: mdi:cart-check
+      - card:
+          type: todo-list
+          entity: todo.google_keep_costco_list
+          display_order: none
+          hide_completed: true
+          hide_create: false
+          hide_section_headers: true
+        attributes:
+          label: Costco List
+          icon: mdi:warehouse
+      - card:
+          type: todo-list
+          entity: todo.google_keep_kids_to_do
+          display_order: none
+          hide_completed: true
+          hide_create: false
+          hide_section_headers: true
+        attributes:
+          label: Kids To Do
+          icon: mdi:human-male-female-child
+
+embedded-to-do:
+  variables:
+    - entity
+  card:
+    type: todo-list
+    entity: '[[entity]]'
+    display_order: none
+    hide_completed: true
+    hide_create: true
+    hide_section_headers: true
+    card_mod:
+      style:
+        .: |
+          ha-card {
+            border: none;
+            background: transparent;
+            height: 100%;
+            max-height: 336px;
+            overflow-y: auto !important;
+          }
+          .addRow { padding-top: 5px !important; }
+        ha-list:
+          .: |
+            :host {
+              overflow-y: auto !important;
+              max-height: 100%;
+            }
+            p.empty {
+              padding-top: 0px !important;
+            }
+          ha-check-list-item:
+            $: |
+              :host {
+                min-height: unset !important;
+                height: auto !important;
+              }
+
+bubble-to-do-lists:
+  card:
+    type: custom:stack-in-card
+    mode: vertical
+    cards:
+      - type: custom:bubble-card
+        card_type: button
+        button_type: name
+        name: Lists
+        icon: mdi:format-list-bulleted
+        event_action:
+          tap_action:
+            action: none
+          double_tap_action:
+            action: none
+          hold_action:
+            action: none
+        button_action: {}
+        styles: ""
+        sub_button:
+          main:
+            - entity: input_select.kitchen_dashboard_selected_list
+              sub_button_type: select
+              show_name: false
+              show_state: true
+              state_background: false
+              show_background: true
+          bottom: []
+        modules:
+          - custom_select
+        custom_select:
+          sub_button_1:
+            - name: Shopping
+              icon: mdi:cart-variant
+            - name: Costco
+              icon: mdi:warehouse
+            - name: Kids
+              icon: mdi:human-male-female-child
+            - name: Honey
+              icon: mdi:arm-flex
+        card_mod:
+          style: |
+            ha-card {
+              margin-bottom: -10px;
+            }
+            .bubble-button-container {
+              border-bottom-left-radius: 0 !important;
+              border-bottom-right-radius: 0 !important;
+              background-color: rgba(255,255,255,.5);
+            }
+
+      - type: conditional
+        conditions:
+          - entity: input_select.kitchen_dashboard_selected_list
+            state: shopping
+        card:
+          type: custom:streamline-card
+          template: embedded-to-do
+          variables:
+            - entity: todo.google_keep_shopping_list
+      - type: conditional
+        conditions:
+          - entity: input_select.kitchen_dashboard_selected_list
+            state: costco
+        card:
+          type: custom:streamline-card
+          template: embedded-to-do
+          variables:
+            - entity: todo.google_keep_costco_list
+      - type: conditional
+        conditions:
+          - entity: input_select.kitchen_dashboard_selected_list
+            state: kids
+        card:
+          type: custom:streamline-card
+          template: embedded-to-do
+          variables:
+            - entity: todo.google_keep_kids_to_do
+      - type: conditional
+        conditions:
+          - entity: input_select.kitchen_dashboard_selected_list
+            state: honey
+        card:
+          type: custom:streamline-card
+          template: embedded-to-do
+          variables:
+            - entity: todo.google_keep_honey_do
+    card_mod:
+      style:
+        .: |
+          ha-card {
+            aspect-ratio: 1 / 1;
+            height: 100%;
+            border-radius: 28px;
+            border: none;
+            background-color: var(--bubble-button-main-background-color, var(--bubble-main-background-color, var(--background-color-2, var(--secondary-background-color))));
+          }
+
+## Weather Card
+bubble-weather:
+  card:
+    type: custom:bubble-card
+    card_type: button
+    button_type: state
+    show_attribute: true
+    attribute: temperature
+    name: "Home"
+    show_name: true
+    sub_button:
+      main: []
+      bottom: []
+    entity: weather.home
+    modules:
+      - weather_forecast
+    frosted_glass:
+      main_icon_color_boolean: icon_theme_color
+      icon_background: light
+      main_shadow: false
+      icon_shadow: false
+      sub_shadow: false
+      tap_feedback: false
+      border_radius: 32
+      blur: 15
+      opacity: 0.1
+    weather_forecast:
+      type: daily
+      max_days: 5
+      hide_icon_background: false
+      card_layout: default
+    button_action:
+      tap_action:
+        action: navigate
+        navigation_path: "#weather-panel"
+    styles: |-
+      .bubble-container {
+        height: 260px !important;
+      }
+
+## Calendar and Events
+calendar-and-events-pro:
+  card:
+    type: custom:button-card
+    show_state: false
+    card_mod:
+      style: |
+        ha-card {
+          height: 350px;
+          width: 100% !important;
+          padding: 0px !important;
+          border-radius: 28px;
+          -webkit-tap-highlight-color: transparent !important;
+          -webkit-touch-callout: none !important;
+          pointer-events: auto !important;
+        }
+        ha-card * {
+          -webkit-tap-highlight-color: transparent !important;
+          -webkit-touch-callout: none !important;
+        }
+    styles:
+      grid:
+        - grid-template-areas: '"events calendar"'
+          grid-template-columns: 1fr 1fr
+          grid-template-rows: 1fr
+          gap: 0px
+          align-items: start
+      card:
+        - padding: 0
+        - margin: 0
+        - -webkit-user-select: none
+        - user-select: none
+        - -webkit-tap-highlight-color: transparent !important
+        - -webkit-touch-callout: none !important
+        - pointer-events: auto !important
+      custom_fields:
+        events:
+          - align-self: start
+          - justify-self: start
+          - margin: 0 8px 0 0
+          - pointer-events: auto !important
+        calendar:
+          - align-self: center
+          - justify-self: center
+    custom_fields:
+      events:
+        card:
+          type: custom:config-template-card
+          entities:
+            - input_text.kitchen_dashboard_selected_date
+          card:
+            type: custom:calendar-card-pro
+            entities:
+              - entity: calendar.birthdays_2
+              - entity: calendar.family
+            start_date: "${states['input_text.kitchen_dashboard_selected_date'].state || 'today'}"
+            days_to_show: 7
+            show_empty_days: true
+            show_past_events: true
+            compact_days_to_show: 0
+            filter_duplicates: true
+            day_separator_width: 1px
+            day_separator_color: "#ccc"
+            today_indicator: dot
+            date_vertical_alignment: top
+            show_countdown: false
+            today_weekday_color: "#6c7b7e !important"
+            today_day_color: "#6c7b7e !important"
+            today_month_color: "#6c7b7e !important"
+            today_indicator_color: "#6c7b7e !important"
+            max_height: 333px
+            card_mod:
+              style: |
+                ha-card {
+                  border-radius: 0;
+                  border: none;
+                  box-shadow: none;
+                  padding: 0 !important;
+                  -webkit-tap-highlight-color: transparent !important;
+                  -webkit-touch-callout: none !important;
+                }
+                .content-container {
+                  padding: 8px !important;
+                }
+      calendar:
+        card:
+          type: custom:calendar-click-wrapper
+          target_entity: input_text.kitchen_dashboard_selected_date
+          calendar_config:
+            enableModeChange: true
+            entities:
+              - entity: calendar.family
+                name: Family
+                color: darkorange
+              - entity: calendar.birthdays_2
+                name: Birthdays
+                color: deepblue
+            defaultMode: Calendar
+            showAllDayEvents: true
+            showMultiDay: true
+            calEventTime: false
+            hideDuplicates: true
+            showDate: false
+            disableCalLink: true
+            firstDayOfWeek: 0
+
+## Tesla Vehicle Card
+tesla-card:
+  card:
+    type: custom:bubble-card
+    card_type: button
+    button_type: name
+    sub_button:
+      main:
+        - name: Top Status Chips
+          buttons_layout: inline
+          group:
+            - entity: device_tracker.fff_location
+              icon: mdi:map-marker-radius
+              state_background: false
+              show_state: true
+              show_background: false
+              scrolling_effect: false
+              name: Location
+              tap_action:
+                action: none
+            - entity: sensor.fff_battery_level
+              name: Battery Level
+              show_background: false
+              scrolling_effect: false
+              show_state: true
+              tap_action:
+                action: none
+              content_layout: icon-left
+              show_attribute: false
+            - entity: sensor.fff_battery_range
+              name: Range
+              show_background: false
+              scrolling_effect: false
+              show_state: true
+              tap_action:
+                action: none
+              content_layout: icon-left
+              icon: mdi:map-marker-distance
+      bottom:
+        - name: Lower Buttons
+          buttons_layout: inline
+          group:
+            - entity: number.fff_charge_limit
+              fill_width: false
+              sub_button_type: slider
+              name: Charge Limit
+              icon: mdi:battery-arrow-up
+              slider_fill_orientation: left
+              slider_value_position: right
+              min_value: 0
+              max_value: 100
+              step: 5
+              content_layout: icon-left
+              slider_live_update: false
+              state_background: false
+              show_state: false
+              force_icon: false
+              tap_action:
+                action: none
+              show_button_info: true
+              width: 50
+              custom_height: 50
+            - entity: climate.fff_climate
+              fill_width: false
+              show_state: false
+              show_name: false
+              name: Climate
+              icon: cbi:tesla-fan
+              tap_action:
+                action: toggle
+              content_layout: icon-left
+              width: 50
+              custom_height: 50
+            - entity: cover.fff_frunk
+              fill_width: false
+              name: Frunk
+              icon: cbi:tesla-hood
+              show_state: false
+              tap_action:
+                action: toggle
+              content_layout: icon-left
+              width: 50
+              custom_height: 50
+            - entity: cover.fff_trunk
+              fill_width: false
+              name: Trunk
+              icon: cbi:tesla-trunk
+              show_state: false
+              tap_action:
+                action: toggle
+              content_layout: icon-left
+              width: 50
+              custom_height: 50
+            - fill_width: false
+              name: Garage
+              icon: mdi:garage-open
+              show_state: false
+              tap_action:
+                action: navigate
+                navigation_path: "#garage"
+              content_layout: icon-left
+              width: 50
+              custom_height: 50
+              show_background: true
+              state_background: true
+              entity: cover.garage_single_door
+          justify_content: center
+      main_layout: inline
+    entity: binary_sensor.fff_status
+    show_state: false
+    show_last_changed: false
+    show_last_updated: false
+    show_attribute: false
+    scrolling_effect: true
+    show_icon: false
+    tap_action:
+      action: none
+    button_action:
+      tap_action:
+        action: none
+      hold_action:
+        action: none
+    name: "#FFF"
+    styles: >-
+      ${subButtonIcon[8].setAttribute("icon",
+      hass.states['cover.garage_single_door'].state === 'closed' ? 'mdi:garage' :
+      hass.states['cover.garage_single_door'].state === 'open' ? 'mdi:garage-open' :
+      'mdi:reload')}
+      .bubble-background {
+        display: flex;
+        background-image: url("/local/media/fff.png");
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 180px;
+        background-position: center;
+        margin-top: 20px;
+      }
+      .bubble-button-container {
+        height: 260px !important;
+      }
+      .bubble-name {
+        font-size: 24px;
+        font-weight: 400;
+        padding: 5px;
+      }
+      .badge.position-1 {
+        top: 0px !important;
+        right: 48px !important;
+      }
+    rows: 1.938
+    modules:
+      - bubble_badges
+    bubble_badges:
+      badges:
+        - color: amber
+          name: Charging
+          target: sub_button
+          sub_button_index: 2
+          icon: cbi:tesla-open
+          animation: glow
+          condition:
+            - condition: state
+              entity_id: sensor.fff_charging
+              state:
+                - charging
+              enabled: true
+        - color: green
+          name: Charged
+          target: sub_button
+          sub_button_index: 2
+          icon: mdi:check-bold
+          condition:
+            - condition: state
+              entity_id: sensor.fff_charging
+              state:
+                - complete
+              enabled: true
+
+## Media Player Cards
+bubble-media-card:
+  variables:
+    - name
+    - entity
+  default:
+    - name: Living Room
+    - entity: media_player.ma_living_room_receiver
+  card:
+    type: custom:bubble-card
+    card_type: media-player
+    entity: '[[entity]]'
+    name: '[[name]]'
+    show_state: false
+    show_attribute: false
+    attribute: active_queue
+    icon: ""
+    main_buttons_position: bottom
+    styles: |
+      .bubble-container {
+        height: 0;
+        padding-bottom: 100%;
+        position: relative;
+      }
+      .bottom-fixed .bubble-media-button {
+        height: 50px !important;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+      .bubble-background {
+        filter: blur(0px);
+      }
+      .bubble-sub-button-1 {
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+      .bubble-dropdown-container > ha-icon {
+        display: none !important;
+      }
+      .bubble-dropdown-container {
+        width: 0 !important;
+      }
+      .bubble-media-info-container {
+        color: black;
+      }
+    rows: 2.156
+    cover_background: true
+    force_icon: false
+    tap_action:
+      action: none
+    button_action: {}
+    main_buttons_full_width: true
+    sub_button:
+      main:
+        - entity: input_select.kitchen_dashboard_media_player
+          name: Players
+          icon: mdi:speaker-multiple
+          show_name: false
+          show_background: true
+          sub_button_type: select
+      bottom: []
+
+playlist-tile:
+  variables:
+    - media_id
+    - media_type
+    - artwork_url
+    - tile_name
+  default:
+    - media_id: ""
+    - media_type: "playlist"
+    - artwork_url: ""
+    - tile_name: "Unknown"
+  card:
+    type: custom:bubble-card
+    card_type: button
+    button_type: name
+    name: "[[tile_name]]"
+    show_icon: false
+    scrolling_effect: false
+    sub_button:
+      main: []
+      bottom: []
+    button_action:
+      tap_action:
+        action: perform-action
+        perform_action: script.music_dashboard_play_media
+        data:
+          media_id: "[[media_id]]"
+          media_type: "[[media_type]]"
+    styles: |-
+      ha-card {
+        width: 100px;
+        --bubble-border-radius: 8px;
+      }
+      .bubble-button-container {
+        height: 100px !important;
+      }
+      .bubble-background {
+        background-image: url("[[artwork_url]]");
+        background-size: cover;
+      }
+      .bubble-name {
+        text-align: center;
+      }
+      .bubble-name-container {
+        background: rgba(255,255,255,.6);
+        border-radius: 5px;
+        padding: 2px 8px;
+        margin: 0 8px;
+      }
+
+## Header/Title Templates
+title_card:
+  variables:
+    title: ''
+  card:
+    type: custom:mushroom-title-card
+    title: '[[title]]'
+    card_mod:
+      style: |
+        ha-card {
+          --title-font-size: 20px !important;
+        }
+
+title_subtitle_card:
+  variables:
+    title: ''
+    subtitle: ''
+    animation_delay: 0s
+  card:
+    type: custom:mushroom-title-card
+    title: '[[title]]'
+    subtitle: '[[subtitle]]'
+    card_mod:
+      style: |
+        ha-card {
+          --title-font-size: 20px !important;
+          --subtitle-font-size: 14px !important;
+          animation: fadeIn 1.0s ease-out [[animation_delay]] both;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }

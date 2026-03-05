@@ -1,0 +1,36 @@
+# Footer navigation bar using Bubble Card horizontal buttons stack
+- type: custom:bubble-card
+  card_type: horizontal-buttons-stack
+  auto_order: false
+  1_link: "#main"
+  1_name: Main
+  1_icon: mdi:sofa
+  2_link: "#basement"
+  2_name: Basement
+  2_icon: mdi:theater
+  3_link: "#garage"
+  3_name: Garage
+  3_icon: mdi:garage-variant
+  4_link: "#outside"
+  4_name: Outside
+  4_icon: m3of:yard
+  5_link: "#cameras"
+  5_name: Cameras
+  5_icon: mdi:cctv
+  6_link: "#music"
+  6_name: Music
+  6_icon: mdi:music
+  card_mod:
+    style: |
+      ha-card .card-content {
+        max-width: unset;
+      }
+      .bubble-background-color {
+        border: none !important;
+      }
+      .horizontal-buttons-stack-card::before {
+        background: none !important;
+      }
+      .bubble-background {
+        opacity: inherit !important;
+      }

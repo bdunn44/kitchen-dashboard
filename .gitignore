@@ -1,0 +1,40 @@
+# Home Assistant
+*.db
+*.log
+home-assistant.log*
+home-assistant_v2.db
+.storage/
+.cloud/
+
+# Secrets
+secrets.yaml
+*.pem
+*.key
+*service-account*.json
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+venv/
+.env
+
+# Temporary files
+*.tmp
+*.bak
+
+# Un-blurred camera screenshots (privacy)
+screenshots/cameras-front.png
+screenshots/cameras-all.png
