@@ -1,0 +1,222 @@
+      # Vacuum #
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Vacuum
+            icon: mdi:robot-vacuum
+            hash: "#vacuum"
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            show_icon: true
+            show_name: true
+            button_action: {}
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+              }
+          - type: custom:xiaomi-vacuum-map-card
+            entity: vacuum.roborock_q5_max
+            vacuum_platform: Roborock
+            map_source:
+              camera: image.roborock_q5_max_main_floor_custom
+            calibration_source:
+              camera: true
+            map_modes:
+              - template: vacuum_clean_zone
+              - template: vacuum_goto
+              - template: vacuum_clean_segment
+                predefined_selections:
+                  - id: "16"
+                    icon:
+                      name: mdi:broom
+                      x: 33250
+                      "y": 26775
+                    label:
+                      text: Mud Room
+                      x: 33250
+                      "y": 26775
+                      offset_y: 35
+                    outline:
+                      - - 32050
+                        - 23950
+                      - - 34450
+                        - 23950
+                      - - 34450
+                        - 29600
+                      - - 32050
+                        - 29600
+                  - id: "17"
+                    icon:
+                      name: mdi:broom
+                      x: 34350
+                      "y": 21475
+                    label:
+                      text: Stairs
+                      x: 34350
+                      "y": 21475
+                      offset_y: 35
+                    outline:
+                      - - 32500
+                        - 19700
+                      - - 36200
+                        - 19700
+                      - - 36200
+                        - 23250
+                      - - 32500
+                        - 23250
+                  - id: "18"
+                    icon:
+                      name: mdi:broom
+                      x: 25525
+                      "y": 23650
+                    label:
+                      text: Dining room
+                      x: 25525
+                      "y": 23650
+                      offset_y: 35
+                    outline:
+                      - - 24250
+                        - 21100
+                      - - 26800
+                        - 21100
+                      - - 26800
+                        - 26200
+                      - - 24250
+                        - 26200
+                  - id: "19"
+                    icon:
+                      name: mdi:broom
+                      x: 37950
+                      "y": 18675
+                    label:
+                      text: Study
+                      x: 37950
+                      "y": 18675
+                      offset_y: 35
+                    outline:
+                      - - 36400
+                        - 17150
+                      - - 39500
+                        - 17150
+                      - - 39500
+                        - 20200
+                      - - 36400
+                        - 20200
+                  - id: "20"
+                    icon:
+                      name: mdi:broom
+                      x: 34250
+                      "y": 18100
+                    label:
+                      text: Entry
+                      x: 34250
+                      "y": 18100
+                      offset_y: 35
+                    outline:
+                      - - 31900
+                        - 16000
+                      - - 36600
+                        - 16000
+                      - - 36600
+                        - 20200
+                      - - 31900
+                        - 20200
+                  - id: "21"
+                    icon:
+                      name: mdi:broom
+                      x: 24750
+                      "y": 19800
+                    label:
+                      text: Balcony
+                      x: 24750
+                      "y": 19800
+                      offset_y: 35
+                    outline:
+                      - - 23050
+                        - 17750
+                      - - 26450
+                        - 17750
+                      - - 26450
+                        - 21850
+                      - - 23050
+                        - 21850
+                  - id: "22"
+                    icon:
+                      name: mdi:broom
+                      x: 28025
+                      "y": 23650
+                    label:
+                      text: Island
+                      x: 28025
+                      "y": 23650
+                      offset_y: 35
+                    outline:
+                      - - 26750
+                        - 21100
+                      - - 29300
+                        - 21100
+                      - - 29300
+                        - 26200
+                      - - 26750
+                        - 26200
+                  - id: "23"
+                    icon:
+                      name: mdi:broom
+                      x: 32525
+                      "y": 16825
+                    label:
+                      text: Bathroom
+                      x: 32525
+                      "y": 16825
+                      offset_y: 35
+                    outline:
+                      - - 31700
+                        - 15950
+                      - - 33350
+                        - 15950
+                      - - 33350
+                        - 17700
+                      - - 31700
+                        - 17700
+                  - id: "24"
+                    icon:
+                      name: mdi:broom
+                      x: 29800
+                      "y": 18725
+                    label:
+                      text: Living room
+                      x: 29800
+                      "y": 18725
+                      offset_y: 35
+                    outline:
+                      - - 26500
+                        - 16000
+                      - - 33100
+                        - 16000
+                      - - 33100
+                        - 21450
+                      - - 26500
+                        - 21450
+                  - id: "25"
+                    icon:
+                      name: mdi:broom
+                      x: 30525
+                      "y": 23600
+                    label:
+                      text: Kitchen
+                      x: 30525
+                      "y": 23600
+                      offset_y: 35
+                    outline:
+                      - - 28950
+                        - 20950
+                      - - 32100
+                        - 20950
+                      - - 32100
+                        - 26250
+                      - - 28950
+                        - 26250

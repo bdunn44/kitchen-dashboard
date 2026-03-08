@@ -1,0 +1,178 @@
+      # Cameras #
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Cameras
+            icon: mdi:cctv
+            hash: "#cameras"
+            button_type: name
+            sub_button:
+              main:
+                - name: View
+                  icon: mdi:view-grid
+                  entity: input_select.kitchen_dashboard_camera_view
+                  sub_button_type: select
+                  show_state: true
+              bottom: []
+            show_icon: true
+            show_name: true
+            button_action: {}
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+                --desktop-width: 750px !important;
+              }
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: input_select.kitchen_dashboard_camera_view
+                state: front
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:frigate-card
+                  cameras:
+                    - camera_entity: camera.driveway_cam
+                  profiles:
+                    - casting
+                  view:
+                    default: live
+                  menu:
+                    style: none
+                  status_bar:
+                    style: none
+                  dimensions:
+                    aspect_ratio: "16:9"
+                  image:
+                    mode: camera
+                - type: custom:frigate-card
+                  cameras:
+                    - camera_entity: camera.doorbell_cam
+                  profiles:
+                    - casting
+                  view:
+                    default: live
+                  menu:
+                    style: none
+                  status_bar:
+                    style: none
+                  dimensions:
+                    aspect_ratio: "16:9"
+                  image:
+                    mode: camera
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: input_select.kitchen_dashboard_camera_view
+                state: back
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:frigate-card
+                  cameras:
+                    - camera_entity: camera.patio_cam
+                  profiles:
+                    - casting
+                  view:
+                    default: live
+                  menu:
+                    style: none
+                  status_bar:
+                    style: none
+                  dimensions:
+                    aspect_ratio: "16:9"
+                  image:
+                    mode: camera
+                - type: custom:frigate-card
+                  cameras:
+                    - camera_entity: camera.basement_cam
+                  profiles:
+                    - casting
+                  view:
+                    default: live
+                  menu:
+                    style: none
+                  status_bar:
+                    style: none
+                  dimensions:
+                    aspect_ratio: "16:9"
+                  image:
+                    mode: camera
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: input_select.kitchen_dashboard_camera_view
+                state: all
+            card:
+              type: vertical-stack
+              cards:
+                - type: horizontal-stack
+                  cards:
+                    - type: custom:frigate-card
+                      cameras:
+                        - camera_entity: camera.driveway_cam
+                      profiles:
+                        - casting
+                      view:
+                        default: live
+                      menu:
+                        style: none
+                      status_bar:
+                        style: none
+                      dimensions:
+                        aspect_ratio: "16:9"
+                        height: 200px
+                      image:
+                        mode: camera
+                    - type: custom:frigate-card
+                      cameras:
+                        - camera_entity: camera.doorbell_cam
+                      profiles:
+                        - casting
+                      view:
+                        default: live
+                      menu:
+                        style: none
+                      status_bar:
+                        style: none
+                      dimensions:
+                        aspect_ratio: "16:9"
+                        height: 200px
+                      image:
+                        mode: camera
+                - type: horizontal-stack
+                  cards:
+                    - type: custom:frigate-card
+                      cameras:
+                        - camera_entity: camera.basement_cam
+                      profiles:
+                        - casting
+                      view:
+                        default: live
+                      menu:
+                        style: none
+                      status_bar:
+                        style: none
+                      dimensions:
+                        aspect_ratio: "16:9"
+                        height: 200px
+                      image:
+                        mode: camera
+                    - type: custom:frigate-card
+                      cameras:
+                        - camera_entity: camera.patio_cam
+                      profiles:
+                        - casting
+                      view:
+                        default: live
+                      menu:
+                        style: none
+                      status_bar:
+                        style: none
+                      dimensions:
+                        aspect_ratio: "16:9"
+                        height: 200px
+                      image:
+                        mode: camera

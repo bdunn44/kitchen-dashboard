@@ -1,0 +1,68 @@
+      # Basement #
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Basement
+            icon: mdi:theater
+            hash: "#basement"
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            show_icon: true
+            show_name: true
+            button_action: {}
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+              }
+              .bubble-pop-up .bubble-pop-up-container {
+                overflow: visible !important;
+                mask-image: inherit !important;
+                -webkit-mask-image: inherit !important;
+              }
+          - type: custom:bubble-card
+            card_type: separator
+            name: Gym
+            icon: mdi:weight-lifter
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            entity: light.wled_gym
+            show_state: true
+            sub_button:
+              main:
+                - entity: select.wled_gym_preset
+                  sub_button_type: select
+                  name: Preset
+                  icon: mdi:palette
+              bottom: []
+            name: Gym Lights
+            icon: mdi:led-strip-variant
+            show_attribute: true
+            attribute: brightness
+            tap_action:
+              action: toggle
+            button_action: {}
+            use_accent_color: true
+            hold_action:
+              action: more-info
+          - type: custom:bubble-card
+            card_type: separator
+            name: Media
+            icon: mdi:youtube
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:bubble-card
+            card_type: media-player
+            sub_button:
+              main: []
+              bottom: []
+            entity: media_player.shield_basement_tv
+            name: Basement TV

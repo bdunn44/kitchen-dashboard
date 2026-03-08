@@ -1,0 +1,23 @@
+      # OLDMusic #
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Music
+            icon: mdi:music
+            hash: "#old-music"
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            show_icon: true
+            show_name: true
+            button_action: {}
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+                --desktop-width: 750px !important;
+              }
+          - type: custom:streamline-card
+            template: selectable-bubble-media-card

@@ -1,0 +1,172 @@
+      # Main #
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Main Floor
+            icon: mdi:sofa
+            hash: "#main"
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            show_icon: true
+            show_name: true
+            button_action: {}
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+              }
+          - type: custom:bubble-card
+            card_type: separator
+            name: Lights
+            icon: mdi:lightbulb-group
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            entity: light.living_area_overhead
+            show_state: true
+            sub_button:
+              main: []
+              bottom: []
+            name: Overhead
+            icon: mdi:light-recessed
+            show_attribute: true
+            attribute: brightness
+            tap_action:
+              action: toggle
+            button_action: {}
+            use_accent_color: true
+            hold_action:
+              action: more-info
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: switch
+                entity: light.island
+                show_state: true
+                sub_button:
+                  main: []
+                  bottom: []
+                name: Island Lights
+                icon: mdi:ceiling-light-multiple
+                show_attribute: true
+                attribute: brightness
+                tap_action:
+                  action: toggle
+                button_action: {}
+                use_accent_color: true
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.dining_room
+                show_state: true
+                sub_button:
+                  main: []
+                  bottom: []
+                name: Dining Room
+                icon: mdi:ceiling-light-multiple
+                show_attribute: true
+                attribute: brightness
+                tap_action:
+                  action: toggle
+                button_action: {}
+                use_accent_color: true
+                hold_action:
+                  action: more-info
+                light_transition: true
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.kitchen_cabinet_lights
+                show_state: true
+                sub_button:
+                  main: []
+                  bottom: []
+                name: Under Cabinets
+                icon: mdi:led-strip-variant
+                show_attribute: true
+                attribute: brightness
+                tap_action:
+                  action: toggle
+                button_action: {}
+                use_accent_color: true
+                hold_action:
+                  action: more-info
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.living_room_lamp
+                show_state: true
+                sub_button:
+                  main: []
+                  bottom: []
+                name: Living Room Lamp
+                icon: mdi:floor-lamp-outline
+                show_attribute: true
+                attribute: brightness
+                tap_action:
+                  action: toggle
+                button_action: {}
+                use_accent_color: true
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.entry
+                show_state: true
+                sub_button:
+                  main: []
+                  bottom: []
+                name: Entry Light
+                icon: mdi:chandelier
+                show_attribute: true
+                attribute: brightness
+                tap_action:
+                  action: toggle
+                button_action: {}
+                use_accent_color: true
+                hold_action:
+                  action: more-info
+                light_transition: true
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: light.stairs
+                show_state: true
+                sub_button:
+                  main: []
+                  bottom: []
+                name: Stairs
+                icon: mdi:stairs
+                show_attribute: true
+                attribute: brightness
+                tap_action:
+                  action: toggle
+                button_action: {}
+                use_accent_color: true
+                hold_action:
+                  action: more-info
+                light_transition: true
+          - type: custom:bubble-card
+            card_type: separator
+            name: Media
+            icon: mdi:youtube
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:bubble-card
+            card_type: media-player
+            sub_button:
+              main: []
+              bottom: []
+            entity: media_player.shield_living_room_tv
+            name: Living Room TV

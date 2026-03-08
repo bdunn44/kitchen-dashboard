@@ -1,0 +1,323 @@
+      # NEW Music #
+      - type: vertical-stack
+        cards:
+          # ── Pop-up container ──────────────────────────────────────
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Music
+            icon: mdi:music
+            hash: "#music"
+            button_type: name
+            show_icon: true
+            show_name: true
+            sub_button:
+              main:
+                - entity: image.music_assistant_jukebox_internal_access_qr_code
+                  name: Party Mode - Pass the Aux!
+                  icon: m3of:qr-code
+                  show_name: true
+                  state_background: false
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+                --desktop-width: 100% !important;
+                max-width: 900px !important;
+              }
+
+          # ── TOP ROW: Player (left) + Queue/QR (right) ────────────
+          - type: horizontal-stack
+            cards:
+
+              # ━━ LEFT: Media Player + Grouping ━━━━━━━━━━━━━━━━━━━━
+              - type: custom:bubble-card
+                card_type: media-player
+                entity: media_player.ma_living_room_receiver
+                name: Living Room
+                show_state: false
+                cover_background: true
+                main_buttons_position: bottom
+                main_buttons_full_width: true
+                sub_button:
+                  main:
+                    - name: Other Players
+                      buttons_layout: column
+                      group:
+                        - name: Add Speakers
+                          show_name: true
+                          icon: mdi:speaker-multiple
+                          tap_action:
+                            action: none
+                          content_layout: icon-left
+                          show_background: false
+                          show_icon: true
+                          show_state: false
+                        - entity: media_player.ma_basement_receiver
+                          name: Basement
+                          icon: mdi:music-note-plus
+                          show_name: true
+                          show_background: true
+                          state_background: false
+                          tap_action:
+                            action: call-service
+                            service: script.music_dashboard_toggle_group_player
+                            service_data:
+                              player_entity: media_player.ma_basement_receiver
+                              master_entity: media_player.ma_living_room_receiver
+                          show_state: false
+                  bottom: []
+                  main_layout: rows
+                styles: |-
+                  .bubble-sub-button-2 {
+                    background-color: ${
+                      (hass.states['media_player.ma_living_room_receiver']
+                        .attributes.group_members || [])
+                        .includes('media_player.ma_basement_receiver')
+                      ? 'rgba(var(--rgb-primary-color))'
+                      : 'rgba(255,255,255,0.5)'
+                    } !important;
+                    color: ${
+                      (hass.states['media_player.ma_living_room_receiver']
+                        .attributes.group_members || [])
+                        .includes('media_player.ma_basement_receiver')
+                      ? 'white'
+                      : 'var(--secondary-text-color)'
+                    } !important;
+                    transition: background-color 0.3s ease;
+                  } 
+                  ${subButtonIcon[3].setAttribute("icon",
+                      (hass.states['media_player.ma_living_room_receiver']
+                        .attributes.group_members || [])
+                        .includes('media_player.ma_basement_receiver') 
+                      ? 'mdi:music-note-minus' 
+                      : 'mdi:music-note-plus' )}
+                  .bubble-container {
+                    height: 0;
+                    padding-bottom: 100%;
+                    position: relative;
+                  } 
+                  .bottom-fixed .bubble-media-button {
+                    height: 50px !important;
+                    background-color: rgba(255, 255, 255, 0.5);
+                  } 
+                  .bubble-background {
+                    filter: blur(0px);
+                  }
+                  .bubble-sub-button-1 {
+                    background-color: rgba(255, 255, 255, 0.7);
+                  } 
+                  .bubble-dropdown-container > ha-icon {
+                    display: none !important;
+                  } 
+                  .bubble-dropdown-container {
+                    width: 0 !important;
+                  } 
+                  .bubble-media-info-container {
+                    color: black; 
+                  }
+                rows: 2.625
+
+              # ━━ RIGHT: Queue ━━━━━━━━━━━━━━━━━━━━━━━━━━
+              - type: custom:mass-card
+                entity: media_player.ma_living_room_receiver
+                allow_collapsing: false
+                limit_before: 1
+                card_mod:
+                  style: 
+                    .: |
+                      ha-card {
+                        border: none;
+                        background: transparent !important;
+                      }
+                    ha-expansion-panel:
+                      $: |
+                        #summary {
+                          min-height: 32px !important;
+                          padding: 0 !important;
+                        }
+                        .summary-icon {
+                          display: none !important;
+                        }
+                        .container.expanded {
+                          height: 332px !important;
+                          overflow-y: auto !important;
+                        }
+                        .list {
+                          height: unset !important;
+                        }
+
+          # ── BOTTOM: Full-width playlist sections ──────────────────
+
+          # ━━ SECTION: Chill ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          - type: custom:bubble-card
+            card_type: separator
+            name: Chill
+            icon: mdi:emoticon-cool-outline
+
+          - type: custom:mod-card
+            card_mod:
+              style: 
+                .: |
+                  ha-card {
+                    display: block;
+                    overflow-x: auto;
+                  }
+                  hui-horizontal-stack-card {
+                    display: inline-block;
+                  }
+                hui-horizontal-stack-card: 
+                  $: |
+                    #root {
+                      display: flex !important;
+                      flex-wrap: nowrap !important;
+                      padding-bottom: 8px;
+                    }
+                    #root streamline-card {
+                      min-width: 100px;
+                      max-width: 100px;
+                      flex-shrink: 0;
+                    }
+            card:
+              type: horizontal-stack
+              cards:
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Bryson's Chill Mix"
+                    media_id: "library://playlist/125"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/brysons-chill-mix.jpg"
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Coffee Table Jazz"
+                    media_id: "Coffee Table Jazz"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/coffee-table-jazz.jpg"
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Disney Classical"
+                    media_id: "library://playlist/126"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/disney-classical.jpg"
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Chill Good Vibes Mix"
+                    media_id: "library://playlist/121"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/chill-good-vibes-mix.jpg"
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Deep House"
+                    media_id: "library://playlist/124"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/deep-house-relax.jpg"
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Ours Samplus"
+                    media_id: "library://playlist/92"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/ours-samplus-radio.jpg"
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Chill"
+                    media_id: "library://playlist/117"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/chill.jpg"
+
+          # ━━ SECTION: Party ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          - type: custom:bubble-card
+            card_type: separator
+            name: Party
+            icon: akar-icons:rock-on
+
+          - type: custom:mod-card
+            card_mod:
+              style: 
+                .: |
+                  ha-card {
+                    display: block;
+                    overflow-x: auto;
+                  }
+                  hui-horizontal-stack-card {
+                    display: inline-block;
+                  }
+                hui-horizontal-stack-card: 
+                  $: |
+                    #root {
+                      display: flex !important;
+                      flex-wrap: nowrap !important;
+                      padding-bottom: 8px;
+                    }
+                    #root streamline-card {
+                      min-width: 100px;
+                      max-width: 100px;
+                      flex-shrink: 0;
+                    }
+            card:
+              type: horizontal-stack
+              cards:
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Hozier Radio"
+                    media_id: "library://playlist/127"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/hozier-radio.jpg"
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Pretty Lights"
+                    media_id: "library://playlist/128"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/best-of-pretty-lights.jpg"
+                - type: custom:streamline-card
+                  template: playlist-tile
+                  variables:
+                    tile_name: "Joywave Radio"
+                    media_id: "library://playlist/77"
+                    media_type: "playlist"
+                    artwork_url: "/local/playlist-art/joywave-radio.jpg"
+
+          # ━━ SECTION: Recently Played (Dynamic from MA) ━━━━━━━━━━
+          - type: custom:bubble-card
+            card_type: separator
+            name: recently played
+            icon: mdi:history
+          
+          - type: custom:mod-card
+            card_mod:
+              style:
+              style: 
+                .: |
+                  ha-card {
+                    display: block;
+                    overflow-x: auto;
+                  }
+                streamline-card:
+                  $: |
+                    hui-horizontal-stack-card {
+                      display: inline-block;
+                    }
+                  hui-horizontal-stack-card: 
+                    $: |
+                      #root {
+                        display: flex !important;
+                        flex-wrap: nowrap !important;
+                        padding-bottom: 8px;
+                      }
+                      #root streamline-card {
+                        min-width: 100px;
+                        max-width: 100px;
+                        flex-shrink: 0;
+                      }
+            card:
+              type: custom:streamline-card
+              template: recently-played-row
+              variables:
+                - sensor_entity: sensor.music_dashboard_recently_played

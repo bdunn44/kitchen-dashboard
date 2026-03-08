@@ -1,0 +1,100 @@
+      # Garage #
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Garage
+            icon: mdi:garage-variant
+            hash: "#garage"
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            show_icon: true
+            show_name: true
+            button_action: {}
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+              }
+          - type: custom:bubble-card
+            card_type: separator
+            name: Lights
+            icon: mdi:lightbulb-group
+            sub_button:
+              main: []
+              bottom: []
+          - type: horizontal-stack
+            cards:
+            - type: custom:bubble-card
+              card_type: button
+              button_type: switch
+              show_state: false
+              sub_button:
+                main: []
+                bottom: []
+              name: Opener Lights
+              icon: mdi:lightbulb-group
+              show_attribute: false
+              attribute: brightness
+              tap_action:
+                action: toggle
+              button_action: {}
+              use_accent_color: true
+              hold_action:
+                action: more-info
+              entity: light.garage_lights
+            - type: custom:bubble-card
+              card_type: button
+              button_type: slider
+              show_state: true
+              sub_button:
+                main: []
+                bottom: []
+              name: Mudroom Light
+              icon: mdi:led-strip-variant
+              show_attribute: false
+              attribute: brightness
+              tap_action:
+                action: toggle
+              button_action: {}
+              use_accent_color: true
+              hold_action:
+                action: more-info
+              entity: light.wled_mudroom
+          - type: custom:bubble-card
+            card_type: separator
+            name: Doors
+            icon: mdi:garage-open-variant
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:bubble-card
+            card_type: cover
+            sub_button:
+              main: []
+              bottom: []
+            entity: cover.garage_single_door
+            name: Single Door
+            icon_open: mdi:garage-open
+            icon_close: mdi:garage
+            show_attribute: false
+            show_state: true
+            tap_action:
+              action: none
+            button_action: {}
+          - type: custom:bubble-card
+            card_type: cover
+            sub_button:
+              main: []
+              bottom: []
+            entity: cover.garage_double_door
+            name: Double Door
+            icon_open: mdi:garage-open-variant
+            icon_close: mdi:garage-variant
+            show_attribute: false
+            show_state: true
+            tap_action:
+              action: none
+            button_action: {}

@@ -1,0 +1,191 @@
+      # Outside #
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Outside
+            icon: m3of:yard
+            hash: "#outside"
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            show_icon: true
+            show_name: true
+            button_action: {}
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+              }
+              .bubble-pop-up .bubble-pop-up-container {
+                overflow: visible !important;
+                mask-image: inherit !important;
+                -webkit-mask-image: inherit !important;
+              }
+          - type: custom:bubble-card
+            card_type: separator
+            name: Lights
+            icon: mdi:lightbulb-group
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:bubble-card
+            card_type: button
+            button_type: switch
+            sub_button:
+              main:
+                - entity: light.lovejoy_jellyfish_all_zones
+                  sub_button_type: select
+                  select_attribute: effect_list
+                  show_icon: false
+                  name: ""
+                  show_name: false
+                  show_state: false
+                  show_attribute: true
+                  attribute: effect
+              bottom: []
+            entity: light.lovejoy_jellyfish_all_zones
+            name: JellyFish Lights
+            icon: mdi:home-lightbulb
+            use_accent_color: true
+            show_state: false
+            show_attribute: false
+            tap_action:
+              action: toggle
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                show_state: false
+                sub_button:
+                  main: []
+                  bottom: []
+                name: ""
+                icon: cbi:recessed-ceiling
+                show_attribute: false
+                attribute: brightness
+                tap_action:
+                  action: toggle
+                button_action: {}
+                use_accent_color: true
+                hold_action:
+                  action: more-info
+                entity: light.porch
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                show_state: false
+                sub_button:
+                  main: []
+                  bottom: []
+                name: ""
+                icon: cbi:recessed-ceiling
+                show_attribute: false
+                attribute: brightness
+                tap_action:
+                  action: toggle
+                button_action: {}
+                use_accent_color: true
+                hold_action:
+                  action: more-info
+                entity: light.patio
+          - type: custom:bubble-card
+            card_type: separator
+            name: Irrigation
+            icon: mdi:sprinkler-variant
+            sub_button:
+              main: []
+              bottom: []
+          - type: custom:bubble-card
+            card_type: button
+            button_type: slider
+            sub_button:
+              main: []
+              bottom: []
+            entity: input_number.irrigation_run_minutes
+            name: Run Timer
+            icon: mdi:timer-outline
+            show_state: true
+            show_attribute: false
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: switch
+                sub_button:
+                  main:
+                    - entity: input_button.start_timed_irrigation
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.run_irrigation_blocking_based_on_input_number
+                        target: {}
+                        data:
+                          entity: switch.front_yard_sprinkler
+                  bottom: []
+                entity: switch.front_yard_sprinkler
+                tap_action:
+                  action: toggle
+                button_action: {}
+                show_last_updated: true
+                name: Front
+              - type: custom:bubble-card
+                card_type: button
+                button_type: switch
+                sub_button:
+                  main:
+                    - entity: input_button.start_timed_irrigation
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.run_irrigation_blocking_based_on_input_number
+                        target: {}
+                        data:
+                          entity: switch.front_yard_drip_line
+                  bottom: []
+                entity: switch.front_yard_drip_line
+                tap_action:
+                  action: toggle
+                button_action: {}
+                show_last_updated: true
+                name: Front Drip
+          - type: horizontal-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: switch
+                sub_button:
+                  main:
+                    - entity: input_button.start_timed_irrigation
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.run_irrigation_blocking_based_on_input_number
+                        target: {}
+                        data:
+                          entity: switch.back_yard_sprinkler_1
+                  bottom: []
+                entity: switch.back_yard_sprinkler_1
+                tap_action:
+                  action: toggle
+                button_action: {}
+                show_last_updated: true
+                name: Back Upper
+              - type: custom:bubble-card
+                card_type: button
+                button_type: switch
+                sub_button:
+                  main:
+                    - entity: input_button.start_timed_irrigation
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.run_irrigation_blocking_based_on_input_number
+                        target: {}
+                        data:
+                          entity: switch.back_yard_sprinkler_2
+                  bottom: []
+                entity: switch.back_yard_sprinkler_2
+                tap_action:
+                  action: toggle
+                button_action: {}
+                show_last_updated: true
+                name: Back Lower

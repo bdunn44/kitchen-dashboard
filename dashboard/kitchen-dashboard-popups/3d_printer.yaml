@@ -1,0 +1,35 @@
+      # 3D Printer #
+      - type: vertical-stack
+        cards:
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Print Eastwood
+            icon: mdi:printer-3d
+            hash: "#3d-printer"
+            button_type: name
+            sub_button:
+              main: []
+              bottom: []
+            show_icon: true
+            show_name: true
+            button_action: {}
+            styles: |-
+              .bubble-pop-up {
+                height: inherit !important;
+                margin-bottom: 30px;
+              }
+          - type: vertical-stack
+            cards:
+              - type: custom:ha-bambulab-ams-card
+                entity: ""
+                header: ""
+                subtitle: ""
+                style: vector
+                ams: ca368e3669567ee2af467edd7c980bf7
+                show_info_bar: true
+                show_type: true
+                spool_anim_reflection: true
+              - type: custom:ha-bambulab-print_status-card
+                printer: 37498caee9addd0c407ba8ba6f1e957e
+                style: simple
+                custom_light: light.wled_print_eastwood
