@@ -298,5 +298,4 @@ views:
 
       ### POPUPS ###
       - type: vertical-stack
-        view_layout:
         cards: !include_dir_merge_list kitchen-dashboard-popups/

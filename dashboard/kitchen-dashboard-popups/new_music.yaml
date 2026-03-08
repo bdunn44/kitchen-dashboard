@@ -284,11 +284,7 @@
                     media_type: "playlist"
                     artwork_url: "/local/playlist-art/joywave-radio.jpg"
 
-<<<<<<< Updated upstream
-          #  SECTION: Recently Played (Dynamic from MA) 
-=======
           # ━━ SECTION: Recently Played (Dynamic from MA) ━━━━━━━━━━
->>>>>>> Stashed changes
           - type: custom:bubble-card
             card_type: separator
             name: recently played
@@ -296,10 +292,7 @@
           
           - type: custom:mod-card
             card_mod:
-<<<<<<< Updated upstream
-=======
               style:
->>>>>>> Stashed changes
               style: 
                 .: |
                   ha-card {

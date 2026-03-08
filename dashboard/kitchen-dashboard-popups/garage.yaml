@@ -97,8 +97,4 @@
             show_state: true
             tap_action:
               action: none
-<<<<<<< Updated upstream
             button_action: {}
-=======
-            button_action: {}
->>>>>>> Stashed changes
