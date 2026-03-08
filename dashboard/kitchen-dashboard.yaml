@@ -1,0 +1,302 @@
+background: center / cover no-repeat url('/local/colin-lloyd-ex_1v95zFHg-unsplash.jpg')
+views:
+  - type: custom:grid-layout
+    path: home
+    title: Home
+    theme: kitchen-dashboard
+    layout:
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
+      grid-template-rows: auto 1fr auto
+      grid-template-areas: |
+        "header header header header header header"
+        "content content content content content content"
+        "footer footer footer footer footer footer"
+      gap: 0px
+      row-gap: -20px 
+      height: 100vh
+      card_mod:
+        style:
+          .: |
+            #root > * {
+              row-gap: -20px !important;
+    cards:
+    
+    ### HEADER ###
+      - type: custom:layout-card
+        layout_type: grid
+        layout:
+          grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
+          gap: 0px
+        view_layout:
+          grid-area: header
+        cards: !include kitchen-dashboard-header.yaml
+
+    ### CONTENT AREA ###
+      - type: custom:mod-card
+        view_layout:
+          grid-area: content
+        card_mod:
+          style: |
+            ha-card {
+              margin-top: -15px;
+            }
+        card:
+          type: custom:layout-card
+          layout_type: grid
+          layout:
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
+          view_layout:
+            grid-area: content
+          cards: 
+            - type: custom:streamline-card
+              template: bubble-weather
+              view_layout:
+                grid-column: span 3
+
+            - type: custom:streamline-card
+              template: tesla-card
+              view_layout:
+                grid-column: span 3
+
+            # - type: custom:layout-card
+            #   layout_type: gap
+            #   view_layout:
+            #     grid-column: span 3
+
+            - type: vertical-stack
+              view_layout:
+                grid-column: span 3
+              cards:
+                - type: custom:bubble-card
+                  card_type: button
+                  button_type: switch
+                  sub_button:
+                    main:
+                      - entity: vacuum.roborock_q5_max
+                        icon: mdi:play
+                        tap_action:
+                          action: perform-action
+                          perform_action: script.start_pause_vacuum
+                          target: {}
+                          data:
+                            vacuum_entity: vacuum.roborock_q5_max
+                        name: Start/Pause
+                      - entity: vacuum.roborock_q5_max
+                        icon: mdi:home-map-marker
+                        tap_action:
+                          action: perform-action
+                          perform_action: vacuum.return_to_base
+                          target:
+                            entity_id: vacuum.roborock_q5_max
+                        name: Return to Dock
+                      - entity: input_boolean.vacuum_enabled
+                        name: Toggle Schedule
+                        icon: mdi:calendar-clock
+                        tap_action:
+                          action: toggle
+                      - name: More Controls
+                        icon: mdi:dots-horizontal
+                        tap_action:
+                          action: navigate
+                          navigation_path: "#vacuum"
+                    bottom: []
+                  entity: vacuum.roborock_q5_max
+                  name: Roomba
+                  force_icon: false
+                  show_state: true
+                  show_attribute: false
+                  tap_action:
+                    action: navigate
+                    navigation_path: "#roomba"
+                  button_action:
+                    tap_action:
+                      action: navigate
+                      navigation_path: "#roomba"
+                  styles: |-
+                    ${subButtonIcon[0].setAttribute("icon",
+                    hass.states['vacuum.roborock_q5_max'].state === 'Cleaning' ? 'mdi:pause' :
+                    'mdi:play')}
+                    .bubble-button-container { height: 89px !important; }
+                    .bubble-wrapper { align-items: flex-start; }
+                    .bubble-icon-container { margin-top: 10px; margin-left: 8px; }
+                    .bubble-name-container { margin-top: 11px; }
+                    .bubble-sub-button-container { margin-top: 11px; }
+                  rows: 1
+                - type: horizontal-stack
+                  cards:
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: switch
+                      sub_button:
+                        main: []
+                        bottom: []
+                      name: ""
+                      styles: |-
+                        .bubble-button-container { height: 89px !important; }
+                        .bubble-wrapper { align-items: flex-start; }
+                        .bubble-icon-container { margin-top: 10px; margin-left: 8px; }
+                        .bubble-name-container { margin-top: 20px; }
+                        .bubble-sub-button-container { margin-top: 11px; }
+                      entity: input_boolean.guest_mode
+                      tap_action:
+                        action: toggle
+                      button_action: {}
+                      scrolling_effect: false
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: switch
+                      sub_button:
+                        main: []
+                        bottom: []
+                      name: ""
+                      styles: |-
+                        .bubble-button-container { height: 89px !important; }
+                        .bubble-wrapper { align-items: flex-start; }
+                        .bubble-icon-container { margin-top: 10px; margin-left: 8px; }
+                        .bubble-name-container { margin-top: 20px; }
+                        .bubble-sub-button-container { margin-top: 11px; }
+                      entity: scene.tv_time
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.tv_time
+                      button_action:
+                        tap_action:
+                          action: perform-action
+                          perform_action: scene.turn_on
+                          target:
+                            entity_id: scene.tv_time
+                      scrolling_effect: false
+                      icon: mdi:youtube-tv
+                - type: horizontal-stack
+                  cards:
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: switch
+                      sub_button:
+                        main: []
+                        bottom: []
+                      name: Watch for Visitors
+                      styles: |-
+                        .bubble-button-container { height: 89px !important; }
+                        .bubble-wrapper { align-items: flex-start; }
+                        .bubble-icon-container { margin-top: 10px; margin-left: 8px; }
+                        .bubble-name-container { margin-top: 20px; }
+                        .bubble-sub-button-container { margin-top: 11px; }
+                      entity: input_boolean.watching_for_visitors
+                      tap_action:
+                        action: toggle
+                      button_action: {}
+                      scrolling_effect: false
+                      icon: mdi:account-eye
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: state
+                      sub_button:
+                        main: []
+                        bottom: []
+                      name: Bedtime
+                      entity: scene.bedtime
+                      styles: |-
+                        .bubble-button-container { height: 89px !important; }
+                        .bubble-wrapper { align-items: flex-start; }
+                        .bubble-icon-container { margin-top: 10px; margin-left: 8px; }
+                        .bubble-name-container { margin-top: 20px; }
+                        .bubble-sub-button-container { margin-top: 11px; }
+                      show_attribute: false
+                      show_state: false
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.bedtime
+                      button_action:
+                        tap_action:
+                          action: perform-action
+                          perform_action: scene.turn_on
+                          target:
+                            entity_id: scene.bedtime
+                        hold_action:
+                          action: none
+                - type: custom:bubble-card
+                  card_type: button
+                  button_type: state
+                  name: Announce
+                  entity: script.announce
+                  show_state: false
+                  show_attribute: false
+                  button_action:
+                    tap_action:
+                      action: none
+                  tap_action:
+                    action: none
+                  sub_button:
+                    main:
+                      - entity: input_select.announcement
+                        sub_button_type: select
+                        show_icon: false
+                        show_state: true
+                      - entity: script.announce
+                        icon: mdi:play
+                        tap_action:
+                          action: perform-action
+                          perform_action: script.announce
+                          target: {}
+                    bottom: []
+                  styles: |-
+                    .bubble-button-container { height: 89px !important; }
+                    .bubble-wrapper { align-items: flex-start; }
+                    .bubble-icon-container { margin-top: 10px; margin-left: 8px; }
+                    .bubble-name-container { margin-top: 20px; }
+                    .bubble-sub-button-container { margin-top: 11px; }
+                  icon: mdi:bullhorn
+
+            - type: custom:streamline-card
+              template: bubble-to-do-lists
+              view_layout:
+                grid-column: span 3
+
+            - type: custom:streamline-card
+              template: calendar-and-events-pro
+              view_layout:
+                grid-column: span 6
+
+      ## OLD SWIPEABLE CONTENT AREA ##
+      # - type: custom:swipe-card
+      #   view_layout:
+      #     grid-area: content
+      #   parameters:
+      #     effect: slide
+      #     speed: 300
+      #     spaceBetween: 0
+      #     threshold: 5
+      #   cards:
+
+          # ## PAGE 1 ##
+          # - type: custom:layout-card
+          #   layout_type: grid
+          #   layout:
+          #     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
+          #   cards: !include kitchen-dashboard-pg-1.yaml
+
+          # ## PAGE 2 ##  
+          # - type: custom:layout-card
+          #   layout_type: grid
+          #   layout:
+          #     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
+          #   cards: !include kitchen-dashboard-pg-2.yaml
+
+      ### FOOTER ###
+      - type: custom:layout-card
+        view_layout:
+          grid-area: footer
+        layout_type: grid
+        layout:
+          grid-template-columns: 1fr auto
+        cards: !include kitchen-dashboard-footer.yaml
+
+      ### POPUPS ###
+      - type: vertical-stack
+        view_layout:
+        cards: !include_dir_merge_list kitchen-dashboard-popups/
